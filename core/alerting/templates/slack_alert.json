@@ -1,0 +1,44 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🚨 Security Alert"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Severity:* {{severity}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Type:* {{type}}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{{description}}"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Details"
+          },
+          "url": "{{dashboard_url}}"
+        }
+      ]
+    }
+  ]
+}
