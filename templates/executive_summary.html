@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Threat Intelligence Executive Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .chart { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Threat Intelligence Summary</h1>
+    <p>Generated: {{ timestamp }}</p>
+
+    <div class="stats">
+        <div>
+            <h3>Critical Threats</h3>
+            <p>{{ statistics.critical_threats }}</p>
+        </div>
+        <div>
+            <h3>Active Campaigns</h3>
+            <p>{{ statistics.active_campaigns }}</p>
+        </div>
+        <div>
+            <h3>Risk Score</h3>
+            <p>{{ statistics.risk_score }}</p>
+        </div>
+    </div>
+
+    <div class="chart">
+        {{ plots.trend }}
+    </div>
+
+    <div class="recommendations">
+        <h2>Recommendations</h2>
+        <ul>
+        {% for rec in recommendations %}
+            <li>{{ rec }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
