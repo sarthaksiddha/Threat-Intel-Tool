@@ -1,0 +1,22 @@
+{
+  "name": "threat-intel-dashboard",
+  "version": "1.0.0",
+  "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.321.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "react-simple-maps": "^3.2.2",
+    "recharts": "^2.10.3",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss": "^3.4.1"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
