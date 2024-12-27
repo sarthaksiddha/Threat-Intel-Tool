@@ -1,0 +1,34 @@
+name: Lateral Movement Detection
+description: Detects potential lateral movement in the network
+
+triggers:
+  - type: scheduled
+    interval: 1h
+  - type: on_alert
+    alert_type: suspicious_login
+
+steps:
+  - name: Collect Authentication Logs
+    action: collect_logs
+    params:
+      sources: [windows_security, ssh_logs]
+      timeframe: 1h
+
+  - name: Analyze Login Patterns
+    action: analyze_patterns
+    params:
+      pattern_type: authentication
+      threshold: 5
+
+  - name: Check for New Connections
+    action: network_analysis
+    params:
+      type: new_connections
+      baseline_period: 24h
+
+responses:
+  - condition: login_anomaly_score > 0.8
+    actions:
+      - isolate_host
+      - notify_soc
+      - create_incident

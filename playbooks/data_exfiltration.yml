@@ -1,0 +1,34 @@
+name: Data Exfiltration Detection
+description: Detects potential data exfiltration attempts
+
+triggers:
+  - type: scheduled
+    interval: 30m
+  - type: on_alert
+    alert_type: large_file_transfer
+
+steps:
+  - name: Monitor Network Traffic
+    action: network_analysis
+    params:
+      type: traffic_analysis
+      metrics: [volume, destination, protocol]
+
+  - name: Check DNS Queries
+    action: dns_analysis
+    params:
+      type: tunneling_detection
+      threshold: 0.7
+
+  - name: Analyze File Operations
+    action: file_analysis
+    params:
+      operations: [copy, upload, archive]
+      size_threshold: 100MB
+
+responses:
+  - condition: exfil_probability > 0.6
+    actions:
+      - block_traffic
+      - capture_pcap
+      - create_incident
