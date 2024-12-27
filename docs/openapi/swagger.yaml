@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: Threat Intelligence API
+  version: 1.0.0
+  description: API for threat intelligence platform with AI integration
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /threats:
+    get:
+      summary: Get all threats
+      responses:
+        '200':
+          description: List of threats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Threat'
+
+  /analyze/{threat_id}:
+    get:
+      summary: Analyze specific threat
+      parameters:
+        - name: threat_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Threat analysis
+
+components:
+  schemas:
+    Threat:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        severity:
+          type: number
+        indicators:
+          type: array
+          items:
+            type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
