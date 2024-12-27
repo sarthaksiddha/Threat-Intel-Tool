@@ -1,23 +1,23 @@
-from fastapi import FastAPI, HTTPException
-from core.feed_collector import ThreatFeedCollector
-from core.ai_analyzer import ThreatAnalyzer
-from database.models import ThreatIndicator
+from fastapi import FastAPI
+from core.logging_config import setup_logging
+from core.error_handler import error_handler, ThreatIntelException
+from monitoring.metrics import monitor_endpoint
+from prometheus_client import make_asgi_app
 
 app = FastAPI()
-collector = ThreatFeedCollector()
-analyzer = ThreatAnalyzer()
+logger = setup_logging()
+metrics_app = make_asgi_app()
+
+app.mount("/metrics", metrics_app)
+app.add_exception_handler(Exception, error_handler)
 
 @app.get("/threats")
+@monitor_endpoint
 async def get_threats():
-    """Get all threat indicators"""
-    threats = await collector.collect_feeds()
-    return {"threats": threats}
-
-@app.get("/analyze/{threat_id}")
-async def analyze_threat(threat_id: str):
-    """Analyze specific threat with AI"""
-    threat = await ThreatIndicator.get(threat_id)
-    if not threat:
-        raise HTTPException(404)
-    analysis = analyzer.analyze_threat(threat)
-    return analysis
+    try:
+        threats = await collector.collect_feeds()
+        logger.info(f"Retrieved {len(threats)} threats")
+        return {"threats": threats}
+    except Exception as e:
+        logger.error(f"Error retrieving threats: {str(e)}")
+        raise ThreatIntelException(message="Failed to retrieve threats")
